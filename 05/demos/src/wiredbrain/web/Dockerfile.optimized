@@ -1,0 +1,28 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS builder
+
+WORKDIR /src
+COPY src/WiredBrain.Web/WiredBrain.Web.csproj .
+RUN dotnet restore
+
+COPY src/WiredBrain.Web/ .
+RUN dotnet publish --no-restore -c Release -o /out WiredBrain.Web.csproj
+
+# split the output to better use the cache 
+RUN mkdir -p /out/wiredbrain-out && \
+    mv /out/wwwroot /out/wiredbrain-out/ && \
+    mv /out/WiredBrain.* /out/wiredbrain-out/ && \
+    mv /out/appsettings*.json /out/wiredbrain-out/
+
+# app image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine
+
+ENV ProductsApi:Url="http://products-api/products" \
+    StockApi:Url="http://stock-api/stock" 
+
+ENTRYPOINT ["dotnet", "/app/WiredBrain.Web.dll"]
+
+WORKDIR /app
+
+COPY --from=builder /out/runtimes/ ./runtimes/
+COPY --from=builder /out/*.dll ./
+COPY --from=builder /out/wiredbrain-out/ ./

@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+
+  products-db:
+    image: wiredbrain/products-db:22.03-linux-amd64
+
+  products-api:
+    image: wiredbrain/products-api:22.03-linux-amd64
+
+  stock-api:
+    image: wiredbrain/stock-api:22.03-linux-amd64
+
+  web:
+    image: wiredbrain/web:22.03-linux-amd64

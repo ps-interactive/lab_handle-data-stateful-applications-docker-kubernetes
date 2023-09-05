@@ -1,0 +1,59 @@
+version: '3.7'
+
+services:
+
+  products-db:
+    image: wiredbrain/products-db:22.05
+    build:
+      context: db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=wired
+    networks:
+      - wb-net
+
+  products-db-2:
+    image: wiredbrain/products-db:22.05-postgres11.15
+    build:
+      context: db
+      dockerfile: Dockerfile.v2
+
+  products-api:
+    image: wiredbrain/products-api:22.05
+    build:
+      context: products-api
+    environment:
+      - LOG_LEVEL=WARN
+    ports:
+      - "8081:80"
+    networks:
+      - wb-net
+    depends_on:
+      - products-db
+
+  stock-api:
+    image: wiredbrain/stock-api:22.05
+    build:
+      context: stock-api
+    ports:
+      - "8082:8080"
+    networks:
+      - wb-net
+    depends_on:
+      - products-db
+  
+  web:
+    image: wiredbrain/web:22.05
+    build:
+      context: web
+    ports:
+      - "8080:80"
+    networks:
+      - wb-net
+    depends_on:
+      - products-api      
+      - stock-api
+  
+networks:
+  wb-net:

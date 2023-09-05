@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: prune-images
+  namespace: default
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: prune-images
+          image: sixeyed/crictl:v1.24.1
+          imagePullPolicy: Always
+          env:
+            - name: CONTAINER_RUNTIME_ENDPOINT
+              value: unix:///var/run/containerd/containerd.sock
+            - name: IMAGE_SERVICE_ENDPOINT
+              value: unix:///var/run/containerd/containerd.sock
+          command:
+            [
+              "sh",
+              "-c",
+              "crictl rmi --prune",
+            ]
+          volumeMounts:
+            - name: containerd
+              mountPath: /var/run/containerd/containerd.sock
+      volumes:
+        - name: containerd
+          hostPath:
+            path: /var/run/containerd/containerd.sock
+            type: Socket

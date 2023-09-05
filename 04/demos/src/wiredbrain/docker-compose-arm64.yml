@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+
+  products-db:
+    image: wiredbrain/products-db:22.05-linux-arm64
+
+  products-db-2:
+    image: wiredbrain/products-db:22.05-postgres11.15-linux-arm64
+
+  products-api:
+    image: wiredbrain/products-api:22.05-linux-arm64
+
+  stock-api:
+    image: wiredbrain/stock-api:22.05-linux-arm64
+
+  web:
+    image: wiredbrain/web:22.05-linux-arm64

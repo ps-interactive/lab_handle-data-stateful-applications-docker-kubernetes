@@ -1,0 +1,18 @@
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: keyvault-ps-kv01
+spec:
+  provider: azure
+  parameters:
+    usePodIdentity: "false"
+    useVMManagedIdentity: "true"
+    userAssignedIdentityID: 75ead74a-7578-4510-8363-050add8abe8b
+    keyvaultName: ps-kv01
+    objects:  |
+      array:
+        - |
+          objectName: products-api-config
+          objectType: secret
+          objectAlias: application.properties
+    tenantId: 68c58dc9-c7db-440f-8c32-ac672250d642

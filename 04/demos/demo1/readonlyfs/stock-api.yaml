@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stock-api
+  labels:
+    app: wiredbrain
+spec:
+  selector:
+    matchLabels:
+        app: wiredbrain
+        component: stock-api
+  template:
+    metadata:
+      labels: 
+        app: wiredbrain
+        component: stock-api
+        storage: readonly
+    spec:
+      containers:
+        - name: app
+          image: wiredbrain/stock-api:22.05
+          envFrom:
+            - configMapRef:
+                name: stock-api-config-db
+          securityContext:
+            readOnlyRootFilesystem: true
+            

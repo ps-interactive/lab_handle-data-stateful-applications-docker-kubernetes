@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+
+  web-slow:
+    image: wiredbrain/web:22.05-m5
+    build:
+      context: web
+      dockerfile: Dockerfile.slow
+
+  web:
+    image: wiredbrain/web:22.05-m5
+    build:
+      context: web
+      dockerfile: Dockerfile
+
+  web-tagged:
+    image: ${REGISTRY:-docker.io}/wiredbrain/web:22.05-m5-${BUILD_NUMBER}
+    build:
+      context: web
+      dockerfile: Dockerfile
+
+  web-optimized:
+    image: ${REGISTRY:-docker.io}/wiredbrain/web:22.05-m5-optimized-${BUILD_NUMBER}
+    build:
+      context: web
+      dockerfile: Dockerfile.optimized
+
+  products-db:
+    image: ${REGISTRY:-docker.io}/wiredbrain/products-db:22.05-m5-${BUILD_NUMBER}
+    build:
+      context: db
+
+  products-api:
+    image: ${REGISTRY:-docker.io}/wiredbrain/products-api:22.05-m5-${BUILD_NUMBER}
+    build:
+      context: products-api
+
+  stock-api:
+    image: ${REGISTRY:-docker.io}/wiredbrain/stock-api:22.05-m5-${BUILD_NUMBER}
+    build:
+      context: stock-api

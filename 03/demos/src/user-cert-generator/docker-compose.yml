@@ -1,0 +1,7 @@
+version: "3.7"
+
+services:
+  user-cert-generator:
+    image: sixeyed/user-cert-generator:latest
+    build:
+      context: .

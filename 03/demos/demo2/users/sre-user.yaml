@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sre-user
+  namespace: users 
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      serviceAccountName: user-cert-generator
+      containers:
+        - name: generator
+          image: sixeyed/user-cert-generator 
+          env:
+            - name: USER_NAME
+              value: siobhan
+            - name: GROUP
+              value: sre
+            - name: PRINT_CERTS
+              value: 'true'

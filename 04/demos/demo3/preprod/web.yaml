@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-lb
+  labels:
+    app: wiredbrain
+spec:
+  ports:
+    - port: 8088
+      targetPort: 80
+  selector:
+    component: web
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config-api
+  labels: 
+    app: wiredbrain
+    component: web
+data:
+  api.json: |-
+    {
+      "ProductsApi": {
+        "Url": "http://products-api-cl/products"
+      },
+      "StockApi": {
+        "Url": "http://stock-api-lb:8088/stock"
+      },
+      "Environment": "PRE-PROD"
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: wiredbrain
+spec:
+  selector:
+    matchLabels:
+        app: wiredbrain
+        component: web
+  template:
+    metadata:
+      labels: 
+        app: wiredbrain
+        component: web
+    spec:
+      containers:
+        - name: app
+          image: wiredbrain/web:22.05
+          volumeMounts:
+            - name: api-config
+              mountPath: "/app/secrets"
+              readOnly: true
+      volumes:
+        - name: api-config
+          configMap:
+            name: web-config-api

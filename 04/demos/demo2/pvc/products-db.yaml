@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: products-db-pvc
+  labels: 
+    app: wiredbrain
+    component: products-db
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-db
+  labels:
+    app: wiredbrain
+spec:
+  selector:
+    matchLabels:
+        app: wiredbrain
+        component: products-db
+  template:
+    metadata:
+      labels: 
+        app: wiredbrain
+        component: products-db
+    spec:
+      containers:
+        - name: app
+          image: wiredbrain/products-db:22.05
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data 
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: products-db-pvc

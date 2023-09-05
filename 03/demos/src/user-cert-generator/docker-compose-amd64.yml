@@ -1,0 +1,3 @@
+services:
+  user-cert-generator:
+    image: sixeyed/user-cert-generator:latest-linux-amd64

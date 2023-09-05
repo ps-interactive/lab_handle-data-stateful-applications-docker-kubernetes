@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: products-api-config-db
+  labels: 
+    app: wiredbrain
+    component: products-api
+data:
+  application.properties: |-
+    spring.jpa.database=POSTGRESQL
+    spring.datasource.platform=postgres
+    spring.datasource.url=jdbc:postgresql://products-db-cl:5432/postgres
+    spring.datasource.username=postgres
+    spring.datasource.password=wired

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-db
+  labels:
+    app: wiredbrain
+spec:
+  selector:
+    matchLabels:
+        app: wiredbrain
+        component: products-db
+  template:
+    metadata:
+      labels: 
+        app: wiredbrain
+        component: products-db
+    spec:
+      containers:
+        - name: app
+          image: wiredbrain/products-db:22.05-postgres11.15

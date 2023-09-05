@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stock-api-config-db
+  labels: 
+    app: wiredbrain
+    component: stock-api
+data:
+  POSTGRES_CONNECTION_STRING: "host=products-db-cl port=5432 user=postgres password=wired dbname=postgres sslmode=disable"

@@ -1,0 +1,5 @@
+version: '3.7'
+
+services:  
+  crictl:
+    image: sixeyed/crictl:v1.24.1-linux-amd64

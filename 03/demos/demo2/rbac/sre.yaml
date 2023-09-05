@@ -1,0 +1,29 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: product-sre
+rules:
+- apiGroups: [""]
+  resources: ["pods","services","secrets","configmaps","endpoints"]
+  verbs: ["get","list","create","delete","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create","delete","get","list","patch","update","watch"]
+- apiGroups: [""]
+  resources: ["pods/log","namespaces"]
+  verbs: [get","list","watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments","statefulsets","replicasets"]
+  verbs: ["get","list","create","delete","patch","update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: product-sre
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: product-sre
+subjects:
+- kind: Group 
+  name: sre

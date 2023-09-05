@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-lb
+  labels:
+    app: wiredbrain
+spec:
+  ports:
+    - port: 8088
+      targetPort: 80
+  selector:
+    component: web
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: wiredbrain
+spec:
+  selector:
+    matchLabels:
+        app: wiredbrain
+        component: web
+  template:
+    metadata:
+      labels: 
+        app: wiredbrain
+        component: web
+    spec:
+      containers:
+        - name: app
+          image: wiredbrain/web:22.03
